@@ -21,7 +21,7 @@ namespace Diceus_test_task
         private readonly MindeeClient _mindeeClient;
         private readonly OpenAIAPI _openAIClient;
 
-        public string PassportData { get; set; }
+        public string DriverLicenseData { get; set; }
         public string VehicleData { get; set; }
 
         public BotContext(ITelegramBotClient bot, MindeeClient mindeeClient, OpenAIAPI openAIClient)

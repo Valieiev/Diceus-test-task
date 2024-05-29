@@ -23,9 +23,9 @@ namespace Diceus_test_task.State
                         fileStream.Seek(0, SeekOrigin.Begin);
                         var extractedData = await context.ExtractDataFromDocument(fileStream);
 
-                        context.PassportData = extractedData;
+                        context.DriverLicenseData = extractedData;
                         context.State = new WaitingForVehicleCertificatePhotoState();
-                        await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, $"Passport photo received. Now, please send a photo of your vehicle identification document.");
+                        await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, $"Driver license received. Now, please send a photo of your vehicle identification document.");
                     }
                 }
                 catch (System.Exception ex)
