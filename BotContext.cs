@@ -57,23 +57,11 @@ namespace Diceus_test_task
 
         public async Task<string> GeneratePolicyDocument(string extractedData)
         {
-            var prompt = $"Generate a car insurance policy document with the following details:\n{extractedData}";
+            var policyData = $" \nStart Date: {DateTime.Now} \n End Date: {DateTime.Now.AddYears(1)} \n  Coverage Amount: 1000$";
+            var prompt = $"Generate a car insurance policy document with the following details:\n{extractedData + policyData}";
             var response = await _openAIClient.Completions.CreateCompletionAsync(new OpenAI_API.Completions.CompletionRequest(
                 prompt,
-                model: OpenAI_API.Models.Model.Davinci,
-                max_tokens: 150
-                )
-            );
-
-            return response.Completions.FirstOrDefault()?.Text.Trim();
-        }
-
-        public async Task<string> GenerateResponse(string userInput)
-        {
-            var prompt = $"The user says: \"{userInput}\". Generate a helpful response:";
-            var response = await _openAIClient.Completions.CreateCompletionAsync(new OpenAI_API.Completions.CompletionRequest(
-                prompt,
-                model: OpenAI_API.Models.Model.Davinci,
+                model: OpenAI_API.Models.Model.Davinci, // or use a more specific model
                 max_tokens: 150
                 )
             );
