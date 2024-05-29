@@ -1,5 +1,4 @@
 ﻿using Diceus_test_task;
-using Diceus_test_task.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mindee;
@@ -20,7 +19,6 @@ internal class Program
             {
                 services.AddHttpClient();
                 services.AddSingleton<ITelegramBotClient>(provider => new TelegramBotClient("6620545239:AAFK1uoCJzgUjFe-wkGXUZvb5M2EVrU8Gzk"));
-                services.AddSingleton<ICommand, StartCommand>();
 
                 services.AddSingleton(provider => new MindeeClient("02fb042ad045b9d7243a6358835f138d"));
                 services.AddSingleton(provider =>new OpenAIAPI("your-api-key"));

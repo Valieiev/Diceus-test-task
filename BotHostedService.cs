@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Diceus_test_task.Commands;
 using Diceus_test_task.State;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -84,7 +83,7 @@ namespace Diceus_test_task
 
                     case "/reset":
                         _userContexts.TryRemove(userId, out _);
-                        await botContext.Bot.SendTextMessageAsync(update.Message.Chat.Id, "Welcome! Please send a photo of your driver license.");
+                        await botContext.Bot.SendTextMessageAsync(update.Message.Chat.Id, "Your state has been reset. Please send a photo of your driver license.");
                         break;
 
                     default:
