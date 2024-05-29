@@ -25,7 +25,9 @@ This bot assists users in purchasing car insurance by processing user-submitted 
     git clone https://github.com/Valieiev/Diceus-test-task
 2. **Install Dependencies**:
     dotnet restore
-3. **Run the Bot**:
+3. **Set API token**
+    In the Program.cs file, replace the token for OpenAIAPI(“your-api-key”)
+4. **Run the Bot**:
     dotnet run
 
 ## Bot Workflow
