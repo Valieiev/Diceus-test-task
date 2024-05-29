@@ -6,7 +6,7 @@ This bot assists users in purchasing car insurance by processing user-submitted 
 
 ## Features
 
-- **Document Submission**: Users can submit photos of their passport and vehicle identification document.
+- **Document Submission**: Users can submit photos of their driver license and vehicle identification document.
 - **Data Extraction**: Extracts data from submitted documents using the Mindee API.
 - **Data Confirmation**: Users confirm the extracted data.
 - **Price Quotation**: Fixed price quotation for insurance.
@@ -37,13 +37,13 @@ This bot assists users in purchasing car insurance by processing user-submitted 
 3. **User**: [Sends driver license photo]
 4. **Bot**: "Driver license photo received. Now, please send a photo of your vehicle identification document."
 5. **User**: [Sends vehicle photo]
-6. **Bot**: "Vehicle identification document received. "Passport Data: [Extracted Passport Data] Vehicle Data: [Extracted Vehicle Data]  Please confirm if this data is correct. (yes/no)"
+6. **Bot**: "Vehicle identification document received. "Driver license: [Extracted Driver License Data] Vehicle Data: [Extracted Vehicle Data]  Please confirm if this data is correct. (yes/no)"
 7. **User**: "Yes"
 8. **Bot**: "The fixed price for the insurance is 100 USD. Do you agree?"
 9. **User**: "Yes"
 10. **Bot**: "Here is your dummy insurance policy document: [Generated Policy]"
 
-By following this workflow, the bot collects both the passport and vehicle identification document photos, processes them, confirms the extracted data with the user, and then provides the insurance quotation and policy document.
+By following this workflow, the bot collects both the driver license and vehicle identification document photos, processes them, confirms the extracted data with the user, and then provides the insurance quotation and policy document.
 
 ## State Management
 
@@ -51,7 +51,7 @@ The bot uses a state machine to handle different stages of the user interaction.
 
 1. **Initial State**: 
     - When the user sends `/start`, the bot sets the state to `WaitingForDriverLicenseState`.
-    - The bot prompts the user to send a photo of their passport.
+    - The bot prompts the user to send a photo of their driver license.
 
 2. **WaitingForDriverLicenseState**:
     - The bot waits for the user to send a Driver License.
