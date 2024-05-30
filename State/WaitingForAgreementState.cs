@@ -17,7 +17,8 @@ namespace Diceus_test_task.State
                 try
                 {
                     var policyDocument = await context.GeneratePolicyDocument($"{context.DriverLicenseData}\n{context.VehicleData}");
-                    await context.Bot.SendDocumentAsync(update.Message.Chat.Id, InputFile.FromStream(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(policyDocument)), "InsurancePolicy.txt"));
+                    var pdfStream = context.GeneratePDF(policyDocument);
+                    await context.Bot.SendDocumentAsync(update.Message.Chat.Id, InputFile.FromStream(pdfStream, "InsurancePolicy.pdf"));
                     await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, "Thank you for your purchase! Here is your insurance policy.");
                     context.State = new WaitingForDriverLicenseState();
                 }

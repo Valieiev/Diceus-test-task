@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Diceus_test_task.State;
 using Mindee;
 using Mindee.Input;
@@ -11,6 +7,8 @@ using Mindee.Product.Generated;
 using OpenAI_API;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using iText.Kernel.Pdf;
+using iText.Layout.Element;
 
 namespace Diceus_test_task
 {
@@ -97,6 +95,23 @@ namespace Diceus_test_task
             var license = document.Inference.Prediction.Fields;
             string VIN = license["vin"].ToString().Split(':')[2].Trim();
             return $"\n Vehicle Identification Number: {VIN}";
+        }
+
+        public MemoryStream GeneratePDF(string content)
+        {
+            var memoryStream = new MemoryStream();
+
+            using (var writer = new PdfWriter(memoryStream))
+            {
+                using (var pdf = new PdfDocument(writer))
+                {
+                    var document = new iText.Layout.Document(pdf);
+                    document.Add(new Paragraph(content));
+                }
+            }
+
+            memoryStream.Position = 0;
+            return memoryStream;
         }
 
     }
