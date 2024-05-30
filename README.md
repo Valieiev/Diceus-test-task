@@ -30,7 +30,7 @@ This bot assists users in purchasing car insurance by processing user-submitted 
 4. **Run the Bot**:
     dotnet run
 5. **Open Bot**:
-   [Telegram bot]{"https://t.me/AV_Car_Insurance_Sales_bot"}
+   [Telegram bot](https://t.me/AV_Car_Insurance_Sales_bot)
 
 ## Bot Workflow
 
