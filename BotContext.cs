@@ -9,6 +9,8 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using iText.Kernel.Pdf;
 using iText.Layout.Element;
+using OpenAI_API.Chat;
+using OpenAI_API.Models;
 
 namespace Diceus_test_task
 {
@@ -56,15 +58,15 @@ namespace Diceus_test_task
         public async Task<string> GeneratePolicyDocument(string extractedData)
         {
             var policyData = $" \nStart Date: {DateTime.Now} \n End Date: {DateTime.Now.AddYears(1)} \n  Coverage Amount: 1000$";
-            var prompt = $"Generate a car insurance policy document with the following details:\n{extractedData + policyData}";
-            var response = await _openAIClient.Completions.CreateCompletionAsync(new OpenAI_API.Completions.CompletionRequest(
-                prompt,
-                model: OpenAI_API.Models.Model.Davinci, // or use a more specific model
-                max_tokens: 150
-                )
+            var prompt = $"Generate a car insurance policy document with the following details: \n{extractedData + policyData}";
+            var response = await _openAIClient.Chat.CreateChatCompletionAsync(new ChatRequest() {
+                Model = Model.ChatGPTTurbo,
+                MaxTokens = 150,
+                Messages= new ChatMessage[] { new ChatMessage(ChatMessageRole.User, prompt)}
+                }
             );
 
-            return response.Completions.FirstOrDefault()?.Text.Trim();
+            return response.Choices[0].Message.TextContent.Trim();
         }
 
         public Task Reset()
@@ -103,6 +105,7 @@ namespace Diceus_test_task
 
             using (var writer = new PdfWriter(memoryStream))
             {
+                writer.SetCloseStream(false);
                 using (var pdf = new PdfDocument(writer))
                 {
                     var document = new iText.Layout.Document(pdf);

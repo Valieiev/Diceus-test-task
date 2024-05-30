@@ -21,7 +21,7 @@ internal class Program
                 services.AddSingleton<ITelegramBotClient>(provider => new TelegramBotClient("6620545239:AAFK1uoCJzgUjFe-wkGXUZvb5M2EVrU8Gzk"));
 
                 services.AddSingleton(provider => new MindeeClient("02fb042ad045b9d7243a6358835f138d"));
-                services.AddSingleton(provider =>new OpenAIAPI("your-api-key"));
+                services.AddSingleton(provider =>new OpenAIAPI("sk-proj-bQmGmgbtiw4FYVvqqIJrT3BlbkFJO696V7WDtJfKPCfDI1bs"));
 
                 services.AddScoped<BotContext>();
                 services.AddHostedService<BotHostedService>();

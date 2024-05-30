@@ -77,7 +77,7 @@ namespace Diceus_test_task
                 switch (update.Message.Text)
                 {
                     case "/start":
-                        await botContext.Bot.SendTextMessageAsync(update.Message.Chat.Id, "Welcome! Please send a photo of your driver license.");
+                        await botContext.Bot.SendTextMessageAsync(update.Message.Chat.Id, $"Welcome, {update.Message?.From?.FirstName} {update.Message?.From?.LastName}! Please send a photo of your driver license.");
                         botContext.State = new WaitingForDriverLicenseState();
                         break;
 

@@ -24,7 +24,6 @@ namespace Diceus_test_task.State
                 }
                 catch (System.Exception ex)
                 {
-
                     await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, "Something went wrong, contact the administrator. \n" + ex.Message);
                 }
 
