@@ -7,7 +7,7 @@ using Telegram.Bot.Types;
 
 namespace Diceus_test_task.State
 {
-    public class WaitingForDriverLicenseState : IState
+    public class WaitingForPassportState : IState
     {
         public async Task HandleAsync(Update update, BotContext context)
         {
@@ -23,9 +23,9 @@ namespace Diceus_test_task.State
                         fileStream.Seek(0, SeekOrigin.Begin);
                         var extractedData = await context.ExtractDataFromDocument(fileStream);
 
-                        context.DriverLicenseData = extractedData;
+                        context.PassportData = extractedData;
                         context.State = new WaitingForVehicleCertificatePhotoState();
-                        await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, $"Driver license received. Now, please send a photo of your vehicle identification document.");
+                        await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, $"Passport received. Now, please send a photo of your vehicle identification document.");
                     }
                 }
                 catch (System.Exception ex)
@@ -36,8 +36,14 @@ namespace Diceus_test_task.State
 
             }
             else
+            if (update.Message.Text != null)
             {
-                await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, "Please send your driver's license as a photo.");
+                await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, await context.GenerateAIResponse(update.Message.Text));
+                await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, "Please send your passport as a photo.");
+            }
+            else
+            {
+                await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, "Please send your passport as a photo.");
             }
         }
     }

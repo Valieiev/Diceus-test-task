@@ -2,7 +2,6 @@ using Diceus_test_task.State;
 using Mindee;
 using Mindee.Input;
 using Mindee.Parsing.Common;
-using Mindee.Product.Us.DriverLicense;
 using Mindee.Product.Generated;
 using OpenAI_API;
 using Telegram.Bot;
@@ -11,6 +10,7 @@ using iText.Kernel.Pdf;
 using iText.Layout.Element;
 using OpenAI_API.Chat;
 using OpenAI_API.Models;
+using Mindee.Product.Passport;
 
 namespace Diceus_test_task
 {
@@ -21,7 +21,7 @@ namespace Diceus_test_task
         private readonly MindeeClient _mindeeClient;
         private readonly OpenAIAPI _openAIClient;
 
-        public string? DriverLicenseData { get; set; }
+        public string? PassportData { get; set; }
         public string? VehicleData { get; set; }
 
         public BotContext(ITelegramBotClient bot, MindeeClient mindeeClient, OpenAIAPI openAIClient)
@@ -29,7 +29,7 @@ namespace Diceus_test_task
             Bot = bot;
             _mindeeClient = mindeeClient;
             _openAIClient = openAIClient;
-            State = new WaitingForDriverLicenseState();
+            State = new WaitingForPassportState();
         }
 
         public async Task HandleUpdateAsync(Update update)
@@ -40,7 +40,7 @@ namespace Diceus_test_task
         public async Task<string> ExtractDataFromDocument(MemoryStream documentStream)
         {
             var inputSource = new LocalInputSource(documentStream.ToArray(), "document.png");
-            var prediction = await _mindeeClient.ParseAsync<DriverLicenseV1>(inputSource);
+            var prediction = await _mindeeClient.ParseAsync<PassportV1>(inputSource);
             var extractedData = ExtractRelevantDocumentData(prediction.Document);
 
             return extractedData;
@@ -49,7 +49,7 @@ namespace Diceus_test_task
         public async Task<string> ExtractVehicleIdentificationNumberFromDocument(MemoryStream documentStream)
         {
             var inputSource = new LocalInputSource(documentStream.ToArray(), "document.png");
-            var prediction = await _mindeeClient.EnqueueAndParseAsync<GeneratedV1>(inputSource, endpoint: new Mindee.Http.CustomEndpoint("vehicle_identification_document", accountName: "AValieiev", version: "1"));
+            var prediction = await _mindeeClient.EnqueueAndParseAsync<GeneratedV1>(inputSource, endpoint: new Mindee.Http.CustomEndpoint("vehicle_identification_document", accountName: "WayneLaren", version: "1"));
             var extractedData = ExtractRelevantVINData(prediction.Document);
 
             return extractedData;
@@ -69,22 +69,36 @@ namespace Diceus_test_task
             return response.Choices[0].Message.TextContent.Trim();
         }
 
+        public async Task<string> GenerateAIResponse(string userInput)
+        {
+            var prompt = $"The user says: \"{userInput}\". Generate a helpful response:";
+            var response = await _openAIClient.Chat.CreateChatCompletionAsync(new ChatRequest()
+            {
+                Model = Model.ChatGPTTurbo,
+                MaxTokens = 150,
+                Messages = new ChatMessage[] { new ChatMessage(ChatMessageRole.User, prompt), new ChatMessage(ChatMessageRole.System, "You are a car insurance application assistant. We cannot change the price of insurance. Be polite.") }
+            }
+            );
+
+            return response.Choices[0].Message.TextContent.Trim();
+        }
+
         public Task Reset()
         {
-            State = new WaitingForDriverLicenseState();
+            State = new WaitingForPassportState();
             return Task.CompletedTask;
         }
 
 
-        private string ExtractRelevantDocumentData(Document<DriverLicenseV1> document)
+        private string ExtractRelevantDocumentData(Document<PassportV1> document)
         {
             if (document.Inference == null)
             {
                 return "Data could not be extracted.";
             }
 
-            var license = document.Inference.Prediction;
-            return $"\n First Name: {license.FirstName} \n Last Name: {license.LastName} \n DOB: {license.DateOfBirth} \n Driver License Number: {license.DriverLicenseId}";
+            var passport = document.Inference.Prediction;
+            return $"\n First Name: {passport.GivenNames.FirstOrDefault()} \n Last Name: {passport.Surname} \n DOB: {passport.BirthDate} \n Passport Number: {passport.IdNumber}";
         }
 
         private string ExtractRelevantVINData(Document<GeneratedV1> document)

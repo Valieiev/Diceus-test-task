@@ -77,13 +77,13 @@ namespace Diceus_test_task
                 switch (update.Message.Text)
                 {
                     case "/start":
-                        await botContext.Bot.SendTextMessageAsync(update.Message.Chat.Id, $"Welcome, {update.Message?.From?.FirstName} {update.Message?.From?.LastName}! Please send a photo of your driver license.");
-                        botContext.State = new WaitingForDriverLicenseState();
+                        await botContext.Bot.SendTextMessageAsync(update.Message.Chat.Id, $"Welcome, {update.Message?.From?.FirstName} {update.Message?.From?.LastName}! Please send a photo of your Passport.");
+                        botContext.State = new WaitingForPassportState();
                         break;
 
                     case "/reset":
                         _userContexts.TryRemove(userId, out _);
-                        await botContext.Bot.SendTextMessageAsync(update.Message.Chat.Id, "Your state has been reset. Please send a photo of your driver license.");
+                        await botContext.Bot.SendTextMessageAsync(update.Message.Chat.Id, "Your state has been reset. Please send a photo of your Passport.");
                         break;
 
                     default:

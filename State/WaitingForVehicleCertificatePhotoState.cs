@@ -25,7 +25,7 @@ namespace Diceus_test_task.State
 
                         context.VehicleData = extractedData;
                         context.State = new WaitingForConfirmationState();
-                        await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, $"Vehicle identification document received. \n Driver License data: {context.DriverLicenseData}. \n Vehicle data: {extractedData}. \n Is this correct? (yes/no)");
+                        await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, $"Vehicle identification document received. \n  Passport data: {context.PassportData}. \n Vehicle data: {extractedData}. \n Is this correct? (yes/no)");
                     }
                 }
                 catch (System.Exception ex)
@@ -36,6 +36,11 @@ namespace Diceus_test_task.State
 
             }
             else
+            if (update.Message.Text != null)
+            {
+                await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, await context.GenerateAIResponse(update.Message.Text));
+                await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, "Please send the document with the vehicle identification number as a photo.");
+            } else
             {
                 await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, "Please send the document with the vehicle identification number as a photo.");
             }

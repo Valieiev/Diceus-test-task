@@ -18,11 +18,12 @@ namespace Diceus_test_task.State
             }
             else if (update.Message.Text.ToLower() == "no")
             {
-                context.State = new WaitingForDriverLicenseState();
+                context.State = new WaitingForPassportState();
                 await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, "Please retake and resubmit the photo of your passport.");
             }
             else
             {
+                await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, await context.GenerateAIResponse(update.Message.Text));
                 await context.Bot.SendTextMessageAsync(update.Message.Chat.Id, "Expected answer “yes” or “no”");
             }
         }
